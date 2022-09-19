@@ -3,7 +3,7 @@ import NavBar from "./components/NavBar";
 import Results from "./components/Results";
 import requests from "../src/util/requests";
 import { useState, useEffect } from "react";
-
+// require("dotenv").config();
 function App() {
   const [results, setResults] = useState(null);
 
