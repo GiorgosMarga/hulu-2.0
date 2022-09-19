@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import NavBar from "./components/NavBar";
+import Results from "./components/Results";
+import requests from "../src/util/requests";
+import { useState, useEffect } from "react";
 
 function App() {
+  const [results, setResults] = useState(null);
+
+  const fetchMovies = (url) => {
+    console.log(url);
+    fetch(`https://api.themoviedb.org/3${url}`).then((data) => {
+      data.json().then((data) => setResults(data.results));
+    });
+  };
+
+  useEffect(() => {
+    function getMovies() {
+      fetch(`https://api.themoviedb.org/3${requests.fetchTrending.url}`).then(
+        (data) => {
+          data.json().then((data) => setResults([...data.results]));
+        }
+      );
+    }
+    if (!results) {
+      getMovies();
+    }
+  }, [results]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <NavBar fetchMovies={fetchMovies} />
+      <Results results={results} />
     </div>
   );
 }
